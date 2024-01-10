@@ -1,0 +1,40 @@
+// src/components/RinRegistrationForm.js
+import React from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+
+const rinSchema = Yup.object().shape({
+    originationId: Yup.number().required('Origination ID is required'),
+    // Add validations for other fields based on the provided data structure
+    // ...
+});
+
+function RinRegistrationForm({ onSubmit }) {
+    const formik = useFormik({
+        initialValues: {
+            originationId: '',
+            // Initialize other fields
+            // ...
+        },
+        validationSchema: rinSchema,
+        onSubmit: values => {
+            onSubmit(values);
+        },
+    });
+
+    return (
+        <form onSubmit={formik.handleSubmit}>
+            <input
+                type="number"
+                name="originationId"
+                onChange={formik.handleChange}
+                value={formik.values.originationId}
+                placeholder="VIRDIS Origination ID"
+            />
+            {/* Other input fields */}
+            <button type="submit">Register RIN</button>
+        </form>
+    );
+}
+
+export default RinRegistrationForm;
