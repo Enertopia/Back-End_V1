@@ -1,0 +1,27 @@
+import React from 'react';
+import RinRegistrationForm from './RinRegistrationForm';
+import { registerRIN } from './web3Functions'; // Import your Web3 interaction function
+
+function RinPlatformParent() {
+    const handleFormSubmit = async (formData) => {
+        try {
+            // Call the blockchain interaction function
+            await registerRIN(formData);
+            console.log('RIN registration successful');
+            // You might want to update the state here to reflect the success
+        } catch (error) {
+            console.error('Error during RIN registration:', error);
+            // Handle errors, possibly updating state to give user feedback
+        }
+    };
+
+    return (
+        <div>
+            <h1>RIN Registration</h1>
+            <RinRegistrationForm onSubmit={handleFormSubmit} />
+            {/* You can add more components or logic here as needed */}
+        </div>
+    );
+}
+
+export default RinPlatformParent;
