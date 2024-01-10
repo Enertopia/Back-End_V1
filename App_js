@@ -1,0 +1,16 @@
+import React from 'react';
+import './App.css';
+import ParentComponent from './ParentComponent'; // Importing ParentComponent
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        {/* Other components */}
+        <ParentComponent /> {/* Rendering ParentComponent */}
+      </header>
+    </div>
+  );
+}
+
+export default App;
