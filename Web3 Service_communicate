@@ -1,0 +1,16 @@
+// src/services/web3Service.js
+import Web3 from 'web3';
+
+const contractABI = [/*...*/]; // Contract ABI
+const contractAddress = "0x..."; // Contract address
+
+export const registerRIN = async (rinData) => {
+    const web3 = new Web3(window.ethereum);
+    const contract = new web3.eth.Contract(contractABI, contractAddress);
+    const accounts = await web3.eth.getAccounts();
+
+    // Construct the RIN data into the format expected by the contract
+    // ...
+
+    return contract.methods.registerRIN(/*...*/).send({ from: accounts[0] });
+};
