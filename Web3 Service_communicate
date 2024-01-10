@@ -1,4 +1,3 @@
-// src/services/web3Service.js
 import Web3 from 'web3';
 
 const contractABI = [/*...*/]; // Contract ABI
@@ -10,7 +9,18 @@ export const registerRIN = async (rinData) => {
     const accounts = await web3.eth.getAccounts();
 
     // Construct the RIN data into the format expected by the contract
-    // ...
+    const formattedRINData = {
+        rinAssignmentCode: rinData.rinAssignmentCode,
+        yearBatch: rinData.yearBatch,
+        companyRegistrationId: rinData.companyRegistrationId,
+        facilityRegistrationId: rinData.facilityRegistrationId,
+        batchNumber: rinData.batchNumber,
+        equivalenceValue: rinData.equivalenceValue,
+        biofuelTypeCode: rinData.biofuelTypeCode,
+        rinBlockStartNumber: rinData.rinBlockStartNumber,
+        rinBlockEndNumber: rinData.rinBlockEndNumber
+        // Add any other necessary transformations or mappings here
+    };
 
-    return contract.methods.registerRIN(/*...*/).send({ from: accounts[0] });
+    return contract.methods.registerRIN(formattedRINData).send({ from: accounts[0] });
 };
