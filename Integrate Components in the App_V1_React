@@ -1,23 +1,70 @@
-// src/App.js
-import React from 'react';
-import RinRegistrationForm from './components/RinRegistrationForm';
-import { registerRIN } from './services/web3Service';
+import React, { useState } from 'react';
 
-function App() {
-    const handleRinSubmit = async (rinData) => {
-        try {
-            const response = await registerRIN(rinData);
-            console.log("RIN registered:", response);
-        } catch (error) {
-            console.error("Error registering RIN:", error);
-        }
+function RinRegistrationForm({ onSubmit }) {
+    const [formData, setFormData] = useState({
+        rinAssignmentCode: '',
+        yearBatch: '',
+        companyRegistrationId: '',
+        facilityRegistrationId: '',
+        batchNumber: '',
+        equivalenceValue: '',
+        biofuelTypeCode: '',
+        rinBlockStartNumber: '',
+        rinBlockEndNumber: ''
+    });
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSubmit(formData);
     };
 
     return (
-        <div className="App">
-            <RinRegistrationForm onSubmit={handleRinSubmit} />
-        </div>
+        <form onSubmit={handleSubmit}>
+            <label>
+                RIN Assignment Code:
+                <input type="text" name="rinAssignmentCode" value={formData.rinAssignmentCode} onChange={handleChange} />
+            </label>
+            {/* Repeat for each field */}
+            <label>
+                Year Batch:
+                <input type="number" name="yearBatch" value={formData.yearBatch} onChange={handleChange} />
+            </label>
+            <label>
+                Company Registration ID:
+                <input type="number" name="companyRegistrationId" value={formData.companyRegistrationId} onChange={handleChange} />
+            </label>
+            <label>
+                Facility Registration ID:
+                <input type="number" name="facilityRegistrationId" value={formData.facilityRegistrationId} onChange={handleChange} />
+            </label>
+            <label>
+                Batch Number:
+                <input type="number" name="batchNumber" value={formData.batchNumber} onChange={handleChange} />
+            </label>
+            <label>
+                Equivalence Value:
+                <input type="number" name="equivalenceValue" value={formData.equivalenceValue} onChange={handleChange} />
+            </label>
+            <label>
+                Biofuel Type Code:
+                <input type="text" name="biofuelTypeCode" value={formData.biofuelTypeCode} onChange={handleChange} />
+            </label>
+            <label>
+                RIN Block Start Number:
+                <input type="number" name="rinBlockStartNumber" value={formData.rinBlockStartNumber} onChange={handleChange} />
+            </label>
+            <label>
+                RIN Block End Number:
+                <input type="number" name="rinBlockEndNumber" value={formData.rinBlockEndNumber} onChange={handleChange} />
+            </label>
+            {/* ... */}
+            <button type="submit">Register RIN</button>
+        </form>
     );
 }
 
-export default App;
+export default RinRegistrationForm;
