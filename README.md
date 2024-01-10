@@ -1,29 +1,12 @@
-These components are designed to interact with each other as part of a decentralized application (DApp) development. 
+RIN registration form component interacts with the RINPlatform smart contract to register new RINs on the blockchain. Here is how they interact:
 
-    RINPlatform Smart Contract (Solidity):
-        This smart contract is deployed on the Ethereum blockchain.
-        It defines functions for registering and transferring RINs.
-        Users with the USER_ROLE can register RINs, and users with the ADMIN_ROLE can transfer RINs.
-        It emits events when RINs are registered or transferred.
+    The RIN registration form collects all the necessary data from the user like rinAssignmentCode, yearBatch etc.
+    It validates the data and then passes it to the registerRIN helper method on submission.
+    The registerRIN method takes the RIN data, connects to the blockchain using Web3, instantiates the RINPlatform contract, constructs the RIN data into the format expected by the contract, and then calls the registerRIN method on the contract.
+    The registerRIN method in the RINPlatform contract creates a new RIN token by minting an NFT and emits a RINRegistered event with the tokenId and RIN data.
+in summary:
 
-    web3Service.js (JavaScript):
-        It uses the web3 library to connect to the Ethereum blockchain.
-        The registerRIN function interacts with the deployed RINPlatform contract by calling the registerRIN method.
-        It constructs and sends transactions to the smart contract, expecting a response.
-
-    RinRegistrationForm.js (React Component):
-        This component provides a form for users to input RIN data, specifically the originationId.
-        It uses Formik and Yup for form validation and handling form submissions.
-        When the form is submitted, it calls the onSubmit function passed as a prop.
-
-    App.js (React Component):
-        The main application component.
-        Imports the RinRegistrationForm and registerRIN functions.
-        It defines a function handleRinSubmit that is called when the form is submitted. This function invokes the registerRIN function from web3Service.js.
-
-Interactions:
-
-    App.js uses the RinRegistrationForm component to collect user input.
-    When the form in RinRegistrationForm.js is submitted, it calls the onSubmit function, which is set to handleRinSubmit in App.js.
-    handleRinSubmit in App.js invokes the registerRIN function from web3Service.js to interact with the RINPlatform smart contract.
-    The registerRIN function constructs a transaction and sends it to the Ethereum blockchain using the web3 library.
+    The React front-end collects & validates RIN data and passes it to a Web3 helper method
+    The Web3 method constructs the data and calls the registerRIN contract method
+    The contract mints an NFT with the RIN data and emits an event
+    The React app can listen for the event to confirm registration
