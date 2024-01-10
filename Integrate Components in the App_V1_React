@@ -1,0 +1,23 @@
+// src/App.js
+import React from 'react';
+import RinRegistrationForm from './components/RinRegistrationForm';
+import { registerRIN } from './services/web3Service';
+
+function App() {
+    const handleRinSubmit = async (rinData) => {
+        try {
+            const response = await registerRIN(rinData);
+            console.log("RIN registered:", response);
+        } catch (error) {
+            console.error("Error registering RIN:", error);
+        }
+    };
+
+    return (
+        <div className="App">
+            <RinRegistrationForm onSubmit={handleRinSubmit} />
+        </div>
+    );
+}
+
+export default App;
