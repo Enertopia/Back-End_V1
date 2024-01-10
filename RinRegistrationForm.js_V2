@@ -1,0 +1,41 @@
+import React from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+
+// Schema for form validation
+const rinSchema = Yup.object().shape({
+    rinAssignmentCode: Yup.string().required('RIN Assignment Code is required'),
+    yearBatch: Yup.number().required('Year Batch is required'),
+    // ... (other fields as per your contract)
+});
+
+function RinRegistrationForm({ onSubmit }) {
+    const formik = useFormik({
+        initialValues: {
+            rinAssignmentCode: '',
+            yearBatch: '',
+            // ... (other fields)
+        },
+        validationSchema: rinSchema,
+        onSubmit: values => {
+            onSubmit(values);
+        },
+    });
+
+    return (
+        <form onSubmit={formik.handleSubmit}>
+            {/* Form fields */}
+            <input
+                type="text"
+                name="rinAssignmentCode"
+                onChange={formik.handleChange}
+                value={formik.values.rinAssignmentCode}
+                placeholder="RIN Assignment Code"
+            />
+            {/* ... (other input fields) */}
+            <button type="submit">Register RIN</button>
+        </form>
+    );
+}
+
+export default RinRegistrationForm;
