@@ -1,1 +1,93 @@
-pragma solidity >=0.7.0 <0.8.0;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.9.0;
+
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
+
+contract RINPlatform is Initializable, ERC721, AccessControl, ReentrancyGuardUpgradeable {
+    // State variables
+    mapping(uint256 => RINData) private rinData;
+    uint256 private rinCounter;
+
+    // Struct for RIN data
+    struct RINData {
+        uint16 year;
+        uint16 companyID;
+        uint16 facilityID;
+        uint16 batchNumber;
+        uint8 equivalenceValue;
+        uint8 fuelCategory;
+        uint64 startNumber;
+        uint64 endNumber;
+        string documentHash; // Hash of the document stored in Storj
+    }
+
+    // Role definitions
+    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+    bytes32 public constant CREATOR_ROLE = keccak256("CREATOR_ROLE");
+    bytes32 public constant RVO_ROLE = keccak256("RVO_ROLE");
+
+    // Events
+    event RINCreated(uint256 indexed rinId, RINData rinData);
+    event RINTransferred(uint256 indexed rinId, address to);
+
+    function initialize(string memory name, string memory symbol) public initializer {
+        ERC721(name, symbol);
+        _setupRole(ADMIN_ROLE, msg.sender);
+        _setRoleAdmin(CREATOR_ROLE, ADMIN_ROLE);
+        _setRoleAdmin(RVO_ROLE, ADMIN_ROLE);
+        rinCounter = 0;
+        __ReentrancyGuard_init();
+    }
+
+    modifier onlyCreator() {
+        if (!hasRole(CREATOR_ROLE, msg.sender)) revert("Unauthorized: Caller is not a creator");
+        _;
+    }
+
+    modifier onlyRVO() {
+        if (!hasRole(RVO_ROLE, msg.sender)) revert("Unauthorized: Caller is not an RVO");
+        _;
+    }
+
+    function createRIN(
+        uint16 year, 
+        uint16 companyID, 
+        uint16 facilityID, 
+        uint16 batchNumber, 
+        uint8 equivalenceValue, 
+        uint8 fuelCategory,
+        uint64 startNumber,
+        uint64 endNumber,
+        string memory documentHash
+    ) external onlyCreator nonReentrant returns (uint256) {
+        RINData memory newRIN = RINData(
+            year, companyID, facilityID, batchNumber, equivalenceValue, fuelCategory, startNumber, endNumber, documentHash
+        );
+        rinData[rinCounter] = newRIN;
+        _mint(msg.sender, rinCounter);
+        emit RINCreated(rinCounter, newRIN);
+        rinCounter++;
+        return rinCounter - 1;
+    }
+
+    function transferRIN(uint256 rinId, address to) external nonReentrant {
+        require(ownerOf(rinId) == msg.sender || hasRole(ADMIN_ROLE, msg.sender), "Unauthorized: Caller cannot transfer this RIN");
+        _transfer(msg.sender, to, rinId);
+        emit RINTransferred(rinId, to);
+    }
+
+    // Additional functions and logic as necessary
+    // ...
+
+    // Consider implementing a function to update NFT metadata for dynamic data management
+    // Also consider functions for off-chain integration
+
+    // Function to retrieve RIN data
+    function getRINData(uint256 rinId) external view returns (RINData memory) {
+        require(_exists(rinId), "Query for nonexistent RIN");
+        return rinData[rinId];
+    }
+}
