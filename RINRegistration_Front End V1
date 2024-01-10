@@ -1,20 +1,33 @@
-// src/components/RinRegistrationForm.js
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 const rinSchema = Yup.object().shape({
-    originationId: Yup.number().required('Origination ID is required'),
-    // Add validations for other fields based on the provided data structure
-    // ...
+    rinAssignmentCode: Yup.string().required('RIN Assignment Code is required'),
+    yearBatch: Yup.number().required('Year Batch is required'),
+    companyRegistrationId: Yup.number().required('Company Registration ID is required'),
+    facilityRegistrationId: Yup.number().required('Facility Registration ID is required'),
+    batchNumber: Yup.number().required('Batch Number is required'),
+    equivalenceValue: Yup.number().required('Equivalence Value is required'),
+    biofuelTypeCode: Yup.string().required('Biofuel Type Code is required'),
+    rinBlockStartNumber: Yup.number().required('RIN Block Start Number is required'),
+    rinBlockEndNumber: Yup.number().required('RIN Block End Number is required'),
+    // Add any additional fields and validations here
 });
 
 function RinRegistrationForm({ onSubmit }) {
     const formik = useFormik({
         initialValues: {
-            originationId: '',
-            // Initialize other fields
-            // ...
+            rinAssignmentCode: '',
+            yearBatch: '',
+            companyRegistrationId: '',
+            facilityRegistrationId: '',
+            batchNumber: '',
+            equivalenceValue: '',
+            biofuelTypeCode: '',
+            rinBlockStartNumber: '',
+            rinBlockEndNumber: '',
+            // Initialize other fields here
         },
         validationSchema: rinSchema,
         onSubmit: values => {
@@ -24,14 +37,16 @@ function RinRegistrationForm({ onSubmit }) {
 
     return (
         <form onSubmit={formik.handleSubmit}>
+            {/* Input field for RIN Assignment Code */}
             <input
-                type="number"
-                name="originationId"
+                type="text"
+                name="rinAssignmentCode"
                 onChange={formik.handleChange}
-                value={formik.values.originationId}
-                placeholder="VIRDIS Origination ID"
+                value={formik.values.rinAssignmentCode}
+                placeholder="RIN Assignment Code"
             />
-            {/* Other input fields */}
+            {/* Add other input fields in a similar manner */}
+            {/* ... */}
             <button type="submit">Register RIN</button>
         </form>
     );
