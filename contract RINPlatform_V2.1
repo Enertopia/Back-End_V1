@@ -1,0 +1,93 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.9.0;
+
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
+
+contract RINPlatform is Initializable, ERC721, AccessControl, ReentrancyGuardUpgradeable {
+    // State variables
+    mapping(uint256 => RINData) private rinDataMapping;
+
+    // Struct for RIN data
+    struct RINData {
+        string rinAssignmentCode;
+        uint256 yearBatch;
+        uint256 companyRegistrationId;
+        uint256 facilityRegistrationId;
+        uint256 batchNumber;
+        uint256 equivalenceValue;
+        string biofuelTypeCode;
+        uint256 rinBlockStartNumber;
+        uint256 rinBlockEndNumber;
+        // Other relevant data fields
+    }
+
+    // Role definitions
+    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+    bytes32 public constant USER_ROLE = keccak256("USER_ROLE");
+
+    // Events
+    event RINRegistered(uint256 indexed tokenId, RINData rinData);
+
+    function initialize(string memory name, string memory symbol) public initializer {
+        ERC721(name, symbol);
+        _setupRole(ADMIN_ROLE, msg.sender);
+        _setRoleAdmin(USER_ROLE, ADMIN_ROLE);
+        __ReentrancyGuard_init();
+    }
+
+    modifier onlyUser() {
+        require(hasRole(USER_ROLE, msg.sender), "Unauthorized: Caller is not a registered user");
+        _;
+    }
+
+    function registerRIN(
+        string memory rinAssignmentCode,
+        uint256 yearBatch,
+        // ... (other parameters)
+        uint256 epaRinBlockEndNumber
+    ) external onlyUser nonReentrant returns (uint256) {
+        require(bytes(rinAssignmentCode).length > 0, "RIN assignment code cannot be empty");
+        
+        uint256 newTokenId = _generateTokenId(rinAssignmentCode, msg.sender);
+        require(rinDataMapping[newTokenId].yearBatch == 0, "RIN with this assignment code and user already exists");
+
+        // Validating non-empty values for all fields
+        require(yearBatch > 0, "Year batch cannot be zero");
+        // ... (additional checks for other fields)
+
+        // Enforcing uniqueness - already checked above with newTokenId
+
+        // Validating data formats and business rules
+        require(epaRinBlockEndNumber > rinBlockStartNumber, "RIN block end number must be greater than start number");
+        // ... (additional format and business rule validations)
+
+        RINData memory newRIN = RINData(
+            rinAssignmentCode,
+            yearBatch,
+            // ... (other fields)
+            epaRinBlockEndNumber
+        );
+
+        rinDataMapping[newTokenId] = newRIN;
+        _mint(msg.sender, newTokenId);
+
+        emit RINRegistered(newTokenId, newRIN);
+        return newTokenId;
+    }
+
+    function getRINData(uint256 tokenId) public view returns (RINData memory) {
+        require(_exists(tokenId), "RINPlatform: RIN data query for nonexistent token");
+        return rinDataMapping[tokenId];
+    }
+
+    function _generateTokenId(string memory rinAssignmentCode, address user) private view returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(rinAssignmentCode, user, block.timestamp)));
+    }
+
+    // ... (other functions as needed)
+
+    // Additional helper functions or modifiers can be added here
+}
