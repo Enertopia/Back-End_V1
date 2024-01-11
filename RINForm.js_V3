@@ -1,0 +1,21 @@
+import React from 'react';
+
+class RINForm extends React.Component {
+  // Form state and handler
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    // Call onSubmit from props with form data
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        {/* Form fields for RIN data */}
+        <button type="submit">Register RIN</button>
+      </form>
+    );
+  }
+}
+
+export default RINForm;
