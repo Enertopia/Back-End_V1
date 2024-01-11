@@ -1,0 +1,19 @@
+import React from 'react';
+
+class RINList extends React.Component {
+  // State to hold RIN data
+
+  componentDidMount() {
+    // Fetch RIN data from the smart contract
+  }
+
+  render() {
+    return (
+      <div>
+        {/* Display list of RINs */}
+      </div>
+    );
+  }
+}
+
+export default RINList;
