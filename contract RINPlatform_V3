@@ -1,0 +1,70 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.9.0;
+
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/security/PullPayment.sol";
+
+contract RINPlatform is Initializable, ERC721, AccessControlUpgradeable, ReentrancyGuardUpgradeable, PausableUpgradeable, PullPayment {
+    // State variables and structs...
+    // ...
+
+    function initialize(string memory name, string memory symbol) public initializer {
+        // Contract initialization logic
+        // ...
+    }
+
+    function registerRIN(
+        // RIN components as individual parameters
+        uint256 rinAssignmentCode,
+        uint256 yearBatch,
+        uint256 companyRegistrationId,
+        uint256 facilityRegistrationId,
+        uint256 batchNumber,
+        uint256 equivalenceValue,
+        string memory biofuelTypeCode,
+        uint256 rinBlockStartNumber,
+        uint256 rinBlockEndNumber
+    ) external onlyUser whenNotPaused nonReentrant returns (uint256) {
+        // Validate RIN components
+        validateRINComponents(
+            rinAssignmentCode,
+            yearBatch,
+            companyRegistrationId,
+            facilityRegistrationId,
+            batchNumber,
+            equivalenceValue,
+            biofuelTypeCode,
+            rinBlockStartNumber,
+            rinBlockEndNumber
+        );
+
+        // RIN registration logic
+        // ...
+
+        emit RINRegistered(newTokenId, newRIN);
+        return newTokenId;
+    }
+
+    function validateRINComponents(
+        uint256 rinAssignmentCode,
+        uint256 yearBatch,
+        uint256 companyRegistrationId,
+        uint256 facilityRegistrationId,
+        uint256 batchNumber,
+        uint256 equivalenceValue,
+        string memory biofuelTypeCode,
+        uint256 rinBlockStartNumber,
+        uint256 rinBlockEndNumber
+    ) internal pure {
+        require(rinAssignmentCode == 1 || rinAssignmentCode == 2, "Invalid assignment code");
+        require(yearBatch >= 2000 && yearBatch <= 2023, "Invalid year batch");
+        // Additional validations
+        // ...
+    }
+
+    // Other functions...
+}
