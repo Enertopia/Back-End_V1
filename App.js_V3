@@ -1,0 +1,24 @@
+import React from 'react';
+import Web3 from 'web3';
+import RINForm from './RINForm';
+import RINList from './RINList';
+
+class App extends React.Component {
+  // Initialize state, web3, and contract instance
+
+  handleRINSubmit = async (rinData) => {
+    // Interact with the smart contract to register RIN
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <h1>RIN Platform</h1>
+        <RINForm onSubmit={this.handleRINSubmit} />
+        <RINList />
+      </div>
+    );
+  }
+}
+
+export default App;
