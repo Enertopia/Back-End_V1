@@ -1,0 +1,136 @@
+[
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "rinAssignmentCode",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "yearBatch",
+        "type": "uint256"
+      },
+      // ... (other parameters)
+      {
+        "internalType": "uint256",
+        "name": "epaRinBlockEndNumber",
+        "type": "uint256"
+      }
+    ],
+    "name": "registerRIN",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType":
+ 
+"uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getRINData",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "rinAssignmentCode",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "yearBatch",
+            "type": "uint256"
+          },
+          // ... (other fields)
+          {
+            "internalType": "uint256",
+            "name": "epaRinBlockEndNumber",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct RINPlatform.RINData",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType":
+ 
+"string",
+        "name": "symbol",
+        "type": "string"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+
+        
+"name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "rinAssignmentCode",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "yearBatch",
+            "type": "uint256"
+          },
+          // ... (other fields)
+          {
+            "internalType": "uint256",
+            "name": "epaRinBlockEndNumber",
+            "type": "uint256"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct RINPlatform.RINData",
+        "name": "rinData",
+        "type": "tuple"
+      }
+    ],
+    "name": "RINRegistered",
+    "type": "event"
+  }
+]
